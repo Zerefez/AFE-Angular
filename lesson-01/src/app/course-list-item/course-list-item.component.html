@@ -1,0 +1,11 @@
+<p>course-list-item works!</p>
+
+@for (course of courses; track course.code) {
+  <div class="course-list-item">
+    <p>Course Name: {{ course.name }}</p>
+    <p>Course Code: {{ course.code }}</p>
+    <p>Course ECTS: {{ course.ects }}</p>
+  </div>
+}
+
+

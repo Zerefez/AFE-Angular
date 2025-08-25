@@ -1,0 +1,16 @@
+<main class="main">
+  <app-navigation-bar />
+
+  <div class="content">
+      <h1>Hello, {{ title }}</h1>
+      <p>Congratulations! Your app is running. 🎉</p>
+  </div>
+
+  <app-course-list-item [courses]="courses" />
+
+</main>
+
+
+<router-outlet />
+<footer class="footer">
+  <span>Angular Fundamentals - Lesson 1</span>
