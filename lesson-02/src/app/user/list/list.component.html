@@ -1,0 +1,8 @@
+@for(Billionaire of billionaires; track Billionaire.name; let i = $index) {
+  <div class="billionaire-list-item">
+    <p>Billionaire Name: {{ Billionaire.name }}</p>
+    <p>Billionaire Net Worth: {{ Billionaire.net_worth | currency }}</p>
+    <p>Billionaire Nationality: {{ Billionaire.nationality }}</p>
+    <a [routerLink]="['/user', i]">View Details</a>
+  </div>
+}

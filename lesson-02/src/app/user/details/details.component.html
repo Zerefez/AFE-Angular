@@ -1,0 +1,9 @@
+@if (billionaire) {
+  <div class="billionaire-details">
+    <h2>{{ billionaire.name }}</h2>
+    <p><strong>Net Worth:</strong> {{ billionaire.net_worth | currency }}</p>
+    <p><strong>Nationality:</strong> {{ billionaire.nationality }}</p>
+  </div>
+} @else {
+  <p>Billionaire not found!</p>
+}
