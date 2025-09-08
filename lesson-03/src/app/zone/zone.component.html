@@ -1,0 +1,12 @@
+<h2>From zone to zoneless</h2>
+@if (likeAngular) {
+  <p>I like Angular</p>
+} @else {
+  <p>I don't like Angular</p>
+}
+
+<button (click)="toggle()">Toggle</button>
+<h3>The counter below requires zone</h3>
+<button (click)="startCounter()">Start counter</button>&nbsp;
+<button (click)="stopCounter()">Stop counter</button>
+<p>&nbsp;&nbsp;count: {{count()}}</p>
