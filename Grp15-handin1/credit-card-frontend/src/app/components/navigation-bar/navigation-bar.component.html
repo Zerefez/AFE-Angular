@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="2"/>
+          <path d="M2 10h20" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </div>
+      <span class="brand-text">Credit</span>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a routerLink="/home" routerLinkActive="active" class="nav-link">
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/add-card" routerLinkActive="active" class="nav-link">
+          Add Card
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/transactions" routerLinkActive="active" class="nav-link">
+          Transactions
+        </a>
+      </li>
+      <li class="nav-item">
+        <button (click)="onLogout()" class="nav-link logout-btn">
+          Sign Out
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>

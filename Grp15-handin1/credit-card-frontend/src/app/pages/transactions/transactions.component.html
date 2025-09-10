@@ -1,0 +1,184 @@
+<div class="transactions-container">
+  <div class="header">
+    <h1>Transactions</h1>
+    <button (click)="showAddForm.set(!showAddForm())" class="add-btn">
+      @if (showAddForm()) {
+        Cancel
+      } @else {
+        + Add Transaction
+      }
+    </button>
+  </div>
+
+  @if (showAddForm()) {
+    <div class="add-form-section">
+      <h2>Add New Transaction</h2>
+      <form [formGroup]="addTransactionForm" (ngSubmit)="onAddTransaction()" class="add-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="credit_card">Credit Card *</label>
+            <select
+              id="credit_card"
+              formControlName="credit_card"
+              [class.error]="getFieldError('credit_card')"
+              class="form-control"
+              required>
+              <option value="">Select Credit Card</option>
+              @for (card of creditCards(); track card.cardNumber) {
+                <option [value]="card.cardNumber">
+                  {{ formatCardNumber(card.cardNumber) }} - {{ card.cardHolderName }}
+                </option>
+              }
+            </select>
+            @if (getFieldError('credit_card')) {
+              <div class="field-error">{{ getFieldError('credit_card') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Amount *</label>
+            <input
+              type="number"
+              id="amount"
+              formControlName="amount"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+              [class.error]="getFieldError('amount')"
+              class="form-control"
+              required>
+            @if (getFieldError('amount')) {
+              <div class="field-error">{{ getFieldError('amount') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="currency">Currency *</label>
+            <select
+              id="currency"
+              formControlName="currency"
+              [class.error]="getFieldError('currency')"
+              class="form-control"
+              required>
+              @for (currency of currencies; track currency) {
+                <option [value]="currency">{{ currency }}</option>
+              }
+            </select>
+            @if (getFieldError('currency')) {
+              <div class="field-error">{{ getFieldError('currency') }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date *</label>
+            <input
+              type="date"
+              id="date"
+              formControlName="date"
+              [class.error]="getFieldError('date')"
+              class="form-control"
+              required>
+            @if (getFieldError('date')) {
+              <div class="field-error">{{ getFieldError('date') }}</div>
+            }
+          </div>
+
+          <div class="form-group full-width">
+            <label for="comment">Comment</label>
+            <input
+              type="text"
+              id="comment"
+              formControlName="comment"
+              placeholder="Transaction description"
+              class="form-control">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="showAddForm.set(false)" class="cancel-btn">Cancel</button>
+          <button type="submit" [disabled]="!addTransactionForm.valid" class="submit-btn">
+            Add Transaction
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <div class="filters-section">
+    <h2>Filter Transactions</h2>
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="filter-group">
+        <label for="card_number_filter">Filter by Card Number</label>
+        <input
+          type="text"
+          id="card_number_filter"
+          formControlName="card_number"
+          placeholder="Enter card number digits"
+          class="form-control">
+      </div>
+    </form>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading transactions...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error">
+      <p>{{ error() }}</p>
+      <button (click)="loadData()" class="retry-btn">Retry</button>
+    </div>
+  } @else {
+    <div class="transactions-section">
+      <div class="section-header">
+        <h2>All Transactions ({{ filteredTransactions().length }})</h2>
+      </div>
+
+      @if (filteredTransactions().length === 0) {
+        <div class="empty-state">
+          <h3>No Transactions Found</h3>
+          <p>
+            @if (filterForm.get('card_number')?.value) {
+              No transactions match your filter criteria.
+            } @else {
+              No transactions have been recorded yet.
+            }
+          </p>
+        </div>
+      } @else {
+        <div class="transactions-list">
+          @for (transaction of filteredTransactions(); track transaction.uid) {
+            <div class="transaction-item">
+              <div class="transaction-header">
+                <div class="card-info">
+                  <div class="card-number">{{ formatCardNumber(transaction.cardNumber) }}</div>
+                  <div class="cardholder">Card {{ transaction.cardNumber }}</div>
+                </div>
+                <div class="amount">{{ formatAmount(transaction.amount, transaction.currencyCode) }}</div>
+              </div>
+
+              <div class="transaction-body">
+                <div class="comment">{{ transaction.comment || 'No description' }}</div>
+                <div class="transaction-meta">
+                  <span class="date">{{ formatDate(transaction.transactionDate) }}</span>
+                </div>
+              </div>
+
+              <div class="transaction-actions">
+                <button
+                  (click)="onDeleteTransaction(transaction.uid)"
+                  class="delete-btn"
+                  title="Delete transaction">
+                  Delete
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

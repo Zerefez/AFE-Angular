@@ -1,0 +1,44 @@
+<div class="home-container">
+  <div class="header">
+    <h1>Credit Cards Overview</h1>
+    <p>Manage your company credit cards</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading credit cards...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error">
+      <p>{{ error() }}</p>
+      <button (click)="loadCreditCards()" class="retry-btn">Retry</button>
+    </div>
+  } @else {
+    <div class="cards-grid">
+      @for (card of creditCards(); track card.cardNumber) {
+        <div class="card-item" (click)="onCardClick(card.cardNumber)">
+          <div class="card-header">
+            <div class="card-number">**** **** **** {{ (card.cardNumber.toString()).slice(-4) }}</div>
+            <div class="issuer">{{ card.issuer }}</div>
+          </div>
+          <div class="card-body">
+            <div class="cardholder-name">{{ card.cardHolderName }}</div>
+            <div class="card-details">
+              <span class="expiry">{{ card.expirationMonth | expirationDate:card.expirationYear }}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="view-details">Click to view details →</span>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <h3>No Credit Cards Found</h3>
+          <p>Add your first credit card to get started</p>
+          <button class="add-card-btn" (click)="router.navigate(['/add-card'])">Add Credit Card</button>
+        </div>
+      }
+    </div>
+  }
+</div>

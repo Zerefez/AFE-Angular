@@ -1,0 +1,105 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="header">
+      <h1>Credit Card Management System</h1>
+          <p>Please login to continue</p>
+          <p class="info-text">Note: Prefix must be lowercase (e.g., grp15&#64;bank.dk)</p>
+    </div>
+
+    @if (error()) {
+      <div class="error-message">
+        {{ error() }}
+      </div>
+    }
+
+    @if (!showCreateGroup()) {
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="prefix@bank.dk"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="1234"
+            class="form-control">
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loading() || !loginForm.valid"
+          class="login-btn">
+          @if (loading()) {
+            <span class="spinner"></span>
+            Logging in...
+          } @else {
+            Login
+          }
+        </button>
+      </form>
+
+      <div class="divider">
+        <span>Don't have a group yet?</span>
+      </div>
+
+      <button
+        (click)="showCreateGroup.set(true)"
+        class="create-group-btn">
+        Create New Group
+      </button>
+    } @else {
+      <form [formGroup]="groupForm" (ngSubmit)="onCreateGroup()" class="group-form">
+        <h2>Create New Group</h2>
+
+        <div class="form-group">
+          <label for="prefix">Prefix</label>
+          <input
+            type="text"
+            id="prefix"
+            formControlName="prefix"
+            placeholder="grp15 (lowercase)"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="groupNumber">Group Number</label>
+          <input
+            type="text"
+            id="groupNumber"
+            formControlName="groupNumber"
+            placeholder="15"
+            class="form-control">
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            (click)="showCreateGroup.set(false)"
+            class="cancel-btn">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="loading() || !groupForm.valid"
+            class="submit-btn">
+            @if (loading()) {
+              <span class="spinner"></span>
+              Creating...
+            } @else {
+              Create Group
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

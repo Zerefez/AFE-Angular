@@ -1,0 +1,9 @@
+<!-- Credit Card Management System -->
+@if (authService.isAuthenticated()) {
+  <app-navigation-bar></app-navigation-bar>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+} @else {
+  <router-outlet />
+}

@@ -1,0 +1,145 @@
+<div class="add-card-container">
+  <div class="header">
+    <button (click)="onCancel()" class="back-btn">← Back to Home</button>
+    <h1>Add New Credit Card</h1>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+    </div>
+  }
+
+  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="card-form">
+    <div class="form-section">
+      <h2>Card Information</h2>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="cardNumber">Card Number *</label>
+          <input
+            type="text"
+            id="cardNumber"
+            formControlName="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            (input)="formatCardNumber($event)"
+            maxlength="19"
+            [class.error]="getFieldError('cardNumber')"
+            class="form-control">
+          @if (getFieldError('cardNumber')) {
+            <div class="field-error">{{ getFieldError('cardNumber') }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cscCode">CSC Code *</label>
+          <input
+            type="text"
+            id="cscCode"
+            formControlName="cscCode"
+            placeholder="123"
+            maxlength="3"
+            pattern="[0-9]*"
+            [class.error]="getFieldError('cscCode')"
+            class="form-control">
+          @if (getFieldError('cscCode')) {
+            <div class="field-error">{{ getFieldError('cscCode') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="issuer">Issuer *</label>
+          <select
+            id="issuer"
+            formControlName="issuer"
+            [class.error]="getFieldError('issuer')"
+            class="form-control">
+            <option value="">Select Issuer</option>
+            @for (issuer of issuers; track issuer) {
+              <option [value]="issuer">{{ issuer }}</option>
+            }
+          </select>
+          @if (getFieldError('issuer')) {
+            <div class="field-error">{{ getFieldError('issuer') }}</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Cardholder Information</h2>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="cardHolderName">Cardholder Name *</label>
+          <input
+            type="text"
+            id="cardHolderName"
+            formControlName="cardHolderName"
+            placeholder="John Doe"
+            [class.error]="getFieldError('cardHolderName')"
+            class="form-control">
+          @if (getFieldError('cardHolderName')) {
+            <div class="field-error">{{ getFieldError('cardHolderName') }}</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Expiration Date</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expirationMonth">Month *</label>
+          <select
+            id="expirationMonth"
+            formControlName="expirationMonth"
+            [class.error]="getFieldError('expirationMonth')"
+            class="form-control">
+            <option value="">Month</option>
+            @for (month of [1,2,3,4,5,6,7,8,9,10,11,12]; track month) {
+              <option [value]="month">{{ month.toString().padStart(2, '0') }}</option>
+            }
+          </select>
+          @if (getFieldError('expirationMonth')) {
+            <div class="field-error">{{ getFieldError('expirationMonth') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="expirationYear">Year *</label>
+          <input
+            type="number"
+            id="expirationYear"
+            formControlName="expirationYear"
+            [min]="currentYear"
+            [max]="currentYear + 20"
+            placeholder="2025"
+            [class.error]="getFieldError('expirationYear')"
+            class="form-control">
+          @if (getFieldError('expirationYear')) {
+            <div class="field-error">{{ getFieldError('expirationYear') }}</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" (click)="onCancel()" class="cancel-btn">Cancel</button>
+      <button
+        type="submit"
+        [disabled]="submitting() || !cardForm.valid"
+        class="submit-btn">
+        @if (submitting()) {
+          <span class="spinner"></span>
+          Adding Card...
+        } @else {
+          Add Credit Card
+        }
+      </button>
+    </div>
+  </form>
+</div>

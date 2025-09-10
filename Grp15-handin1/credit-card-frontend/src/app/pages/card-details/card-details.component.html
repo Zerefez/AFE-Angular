@@ -1,0 +1,83 @@
+<div class="card-details-container">
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading card details...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error">
+      <p>{{ error() }}</p>
+      <button (click)="router.navigate(['/home'])" class="back-btn">Back to Home</button>
+    </div>
+  } @else if (creditCard()) {
+    <div class="header">
+      <button (click)="router.navigate(['/home'])" class="back-btn">← Back to Home</button>
+      <h1>Credit Card Details</h1>
+    </div>
+
+    <div class="card-info">
+      <div class="credit-card">
+        <div class="card-background">
+          <div class="card-header">
+            <div class="card-number">{{ formatCardNumber(creditCard()!.cardNumber) }}</div>
+            <div class="issuer">{{ creditCard()!.issuer }}</div>
+          </div>
+          <div class="card-body">
+            <div class="cardholder-name">{{ creditCard()!.cardHolderName }}</div>
+            <div class="card-details">
+              <div class="expiry">
+                <span class="label">Valid Thru</span>
+                <span class="value">{{ creditCard()!.expirationMonth.toString().padStart(2, '0') }}/{{ creditCard()!.expirationYear }}</span>
+              </div>
+              <div class="csc">
+                <span class="label">CSC</span>
+                <span class="value">{{ creditCard()!.cscCode }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button
+          (click)="onDeleteCard()"
+          [disabled]="deleting()"
+          class="delete-btn">
+          @if (deleting()) {
+            <span class="spinner-small"></span>
+            Deleting...
+          } @else {
+            Delete Card
+          }
+        </button>
+      </div>
+    </div>
+
+    <div class="transactions-section">
+      <h2>Transactions</h2>
+      @if (transactions().length === 0) {
+        <div class="empty-transactions">
+          <p>No transactions found for this credit card.</p>
+        </div>
+      } @else {
+        <div class="transactions-list">
+          @for (transaction of transactions(); track transaction.uid) {
+            <div class="transaction-item">
+              <div class="transaction-main">
+                <div class="transaction-amount">
+                  {{ formatAmount(transaction.amount, transaction.currencyCode) }}
+                </div>
+                <div class="transaction-date">
+                  {{ formatDate(transaction.transactionDate) }}
+                </div>
+              </div>
+              <div class="transaction-comment">
+                {{ transaction.comment }}
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
