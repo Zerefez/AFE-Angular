@@ -43,9 +43,12 @@ export class AuthService {
     );
   }
 
-  logout() {
+  logout(showMessage = false) {
     localStorage.removeItem('auth_token');
     this.isAuthenticatedSubject.next(false);
+    if (showMessage) {
+      alert('Your session has expired. Please log in again.');
+    }
   }
 
   isAuthenticated(): boolean {
