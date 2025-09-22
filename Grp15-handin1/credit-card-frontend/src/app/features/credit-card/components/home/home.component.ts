@@ -1,9 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { CreditCard } from '../../../../shared/models/credit-card.model';
+import { ExpirationDatePipe } from '../../../../shared/pipes/expiration-date.pipe';
 import { CreditCardService } from '../../services/credit-card.service';
-import { CreditCard } from '../../models/credit-card.model';
-import { ExpirationDatePipe } from '../../pipes/expiration-date.pipe';
 
 @Component({
   selector: 'app-home',
@@ -13,14 +13,12 @@ import { ExpirationDatePipe } from '../../pipes/expiration-date.pipe';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
+  private readonly creditCardService = inject(CreditCardService);
+  protected readonly router = inject(Router);
+
   creditCards = signal<CreditCard[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
-
-  constructor(
-    private creditCardService: CreditCardService,
-    public router: Router
-  ) {}
 
   ngOnInit() {
     this.loadCreditCards();

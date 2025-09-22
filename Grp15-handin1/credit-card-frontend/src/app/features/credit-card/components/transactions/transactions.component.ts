@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CreditCard } from '../../models/credit-card.model';
-import { CreateTransactionDto, Transaction } from '../../models/transaction.model';
+import { CreditCard } from '../../../../shared/models/credit-card.model';
+import { CreateTransactionDto, Transaction } from '../../../../shared/models/transaction.model';
 import { CreditCardService } from '../../services/credit-card.service';
 import { TransactionService } from '../../services/transaction.service';
 

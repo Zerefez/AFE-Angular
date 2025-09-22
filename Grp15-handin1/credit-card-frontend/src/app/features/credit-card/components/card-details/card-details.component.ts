@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CreditCard } from '../../models/credit-card.model';
-import { Transaction } from '../../models/transaction.model';
+import { CreditCard } from '../../../../shared/models/credit-card.model';
+import { Transaction } from '../../../../shared/models/transaction.model';
 import { CreditCardService } from '../../services/credit-card.service';
 import { TransactionService } from '../../services/transaction.service';
 

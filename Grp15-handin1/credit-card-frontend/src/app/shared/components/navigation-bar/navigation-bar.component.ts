@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../core/auth.service';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -10,11 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './navigation-bar.component.scss'
 })
 export class NavigationBarComponent {
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   onLogout() {
     this.authService.logout();

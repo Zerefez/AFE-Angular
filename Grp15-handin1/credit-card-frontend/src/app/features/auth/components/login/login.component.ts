@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService, CreateGroupDto, LoginDto } from '../../services/auth.service';
+import { AuthService, CreateGroupDto, LoginDto } from '../../../../core/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +12,10 @@ import { AuthService, CreateGroupDto, LoginDto } from '../../services/auth.servi
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   showCreateGroup = signal(false);
   loading = signal(false);
   error = signal<string | null>(null);
@@ -19,11 +23,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   groupForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['1234', [Validators.required]]

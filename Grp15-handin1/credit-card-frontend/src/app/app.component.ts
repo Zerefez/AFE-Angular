@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './core/auth.service';
+import { NavigationBarComponent } from './shared/components/navigation-bar/navigation-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,5 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'credit-card-frontend';
-
-  constructor(public authService: AuthService) {}
+  protected readonly authService = inject(AuthService);
 }
