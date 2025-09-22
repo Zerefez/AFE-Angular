@@ -135,6 +135,21 @@
     <div class="transactions-section">
       <div class="section-header">
         <h2>All Transactions ({{ filteredTransactions().length }})</h2>
+        <div class="sort-controls">
+          <span class="sort-label">Sort by:</span>
+          <button
+            class="sort-btn"
+            [class.active]="sortField() === 'date'"
+            (click)="setSortField('date')">
+            Date {{ getSortIcon('date') }}
+          </button>
+          <button
+            class="sort-btn"
+            [class.active]="sortField() === 'amount'"
+            (click)="setSortField('amount')">
+            Amount {{ getSortIcon('amount') }}
+          </button>
+        </div>
       </div>
 
       @if (filteredTransactions().length === 0) {

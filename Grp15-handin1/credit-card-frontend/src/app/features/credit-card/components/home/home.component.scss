@@ -80,11 +80,45 @@
   }
 }
 
+.cards-container {
+  margin-top: 40px;
+}
+
+.bank-group {
+  margin-bottom: 60px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.bank-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d2d2d7;
+
+  .bank-name {
+    color: #1d1d1f;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  .card-count {
+    color: #86868b;
+    font-size: 17px;
+    font-weight: 400;
+  }
+}
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 32px;
-  margin-top: 40px;
 }
 
 .card-item {

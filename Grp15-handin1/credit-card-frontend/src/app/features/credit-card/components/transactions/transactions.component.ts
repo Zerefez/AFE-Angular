@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreditCard } from '../../../../shared/models/credit-card.model';
 import { CreateTransactionDto, Transaction } from '../../../../shared/models/transaction.model';
 import { CreditCardService } from '../../services/credit-card.service';
 import { TransactionService } from '../../services/transaction.service';
+
+type SortField = 'date' | 'amount';
+type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-transactions',
@@ -15,14 +18,45 @@ import { TransactionService } from '../../services/transaction.service';
 })
 export class TransactionsComponent implements OnInit {
   transactions = signal<Transaction[]>([]);
-  filteredTransactions = signal<Transaction[]>([]);
   creditCards = signal<CreditCard[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   showAddForm = signal(false);
 
+  sortField = signal<SortField>('date');
+  sortDirection = signal<SortDirection>('desc');
+  cardNumberFilter = signal<string>('');
+
   filterForm: FormGroup;
   addTransactionForm: FormGroup;
+
+  filteredTransactions = computed(() => {
+    let transactions = this.transactions();
+
+    const cardFilter = this.cardNumberFilter();
+    if (cardFilter) {
+      transactions = transactions.filter(t =>
+        t.cardNumber.toString().includes(cardFilter)
+      );
+    }
+
+    const field = this.sortField();
+    const direction = this.sortDirection();
+
+    return transactions.sort((a, b) => {
+      let comparison = 0;
+
+      if (field === 'date') {
+        const dateA = new Date(a.transactionDate);
+        const dateB = new Date(b.transactionDate);
+        comparison = dateA.getTime() - dateB.getTime();
+      } else if (field === 'amount') {
+        comparison = a.amount - b.amount;
+      }
+
+      return direction === 'asc' ? comparison : -comparison;
+    });
+  });
 
   currencies = ['USD', 'EUR', 'GBP', 'DKK', 'SEK', 'NOK'];
 
@@ -49,6 +83,12 @@ export class TransactionsComponent implements OnInit {
     this.setupFilters();
   }
 
+  setupFilters() {
+    this.filterForm.get('card_number')?.valueChanges.subscribe(cardNumber => {
+      this.cardNumberFilter.set(cardNumber || '');
+    });
+  }
+
   loadData() {
     this.loading.set(true);
 
@@ -57,7 +97,6 @@ export class TransactionsComponent implements OnInit {
       this.creditCardService.getCreditCards().toPromise()
     ]).then(([transactions, creditCards]) => {
       this.transactions.set(transactions || []);
-      this.filteredTransactions.set(transactions || []);
       this.creditCards.set(creditCards || []);
       this.loading.set(false);
     }).catch(error => {
@@ -67,22 +106,19 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
-  setupFilters() {
-    this.filterForm.get('card_number')?.valueChanges.subscribe(cardNumber => {
-      this.applyFilter(cardNumber);
-    });
+
+  setSortField(field: SortField) {
+    if (this.sortField() === field) {
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.sortField.set(field);
+      this.sortDirection.set(field === 'date' ? 'desc' : 'asc');
+    }
   }
 
-  applyFilter(cardNumber: string) {
-    const allTransactions = this.transactions();
-    if (!cardNumber) {
-      this.filteredTransactions.set(allTransactions);
-    } else {
-      const filtered = allTransactions.filter(t =>
-        t.cardNumber.toString().includes(cardNumber)
-      );
-      this.filteredTransactions.set(filtered);
-    }
+  getSortIcon(field: SortField): string {
+    if (this.sortField() !== field) return ' ';
+    return this.sortDirection() === 'asc' ? '↑' : '↓';
   }
 
   getFieldError(fieldName: string): string | null {

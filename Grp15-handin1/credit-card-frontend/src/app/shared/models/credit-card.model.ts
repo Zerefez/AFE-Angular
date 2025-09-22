@@ -1,13 +1,12 @@
 export interface CreditCard {
-  cardNumber: number; // integer($int64) in API
-  cscCode: number;    // integer($int32) in API
+  cardNumber: number;
+  cscCode: number;
   cardHolderName: string;
-  expirationMonth: number; // integer($int32) in API
-  expirationYear: number;  // integer($int32) in API
+  expirationMonth: number;
+  expirationYear: number;
   issuer: string;
 }
 
-// For backward compatibility with existing code
 export interface CreditCardLegacy {
   card_number: number;
   csc_code: number;

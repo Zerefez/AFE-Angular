@@ -13,7 +13,6 @@ export class ExpirationDatePipe implements PipeTransform {
     const monthStr = month.toString().padStart(2, '0');
     const yearStr = year.toString();
 
-    // Check if the card is expired
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;

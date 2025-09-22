@@ -127,7 +127,6 @@ export class AddCardComponent {
       value = value.substring(0, 16);
     }
     event.target.value = formattedValue;
-    // Update the form control with the unformatted value (digits only)
     this.cardForm.get('cardNumber')?.setValue(value, { emitEvent: false });
   }
 
